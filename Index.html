@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔱 Panel Imperial Teshuá</title>
+    <style>
+        /* Estilo general de la página en el móvil */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #121212; /* Gris oscuro de fondo */
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+
+        /* Botonera superior fija */
+        .tabs-navegacion {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #1e1e1e; /* Gris oscuro profesional para la barra */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        /* Botones pequeños y táctiles */
+        .boton-tab {
+            background-color: #333333;
+            color: #aaaaaa;
+            border: 1px solid #444444;
+            padding: 8px 16px;
+            font-size: 0.9em;
+            font-weight: bold;
+            border-radius: 20px; /* Bordes redondeados */
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Botón iluminado cuando está activo */
+        .boton-tab.activo {
+            background-color: #00ffff; /* Color cian brillante para resaltar */
+            color: #000000;
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Contenedor que ocupa el resto de la pantalla del móvil */
+        .contenedor-pantallas {
+            margin-top: 60px; /* Espacio para no taparse con los botones */
+            width: 100%;
+            height: calc(100vh - 60px);
+        }
+
+        /* Ocultar o mostrar los espacios de Hugging Face */
+        .pantalla {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .pantalla.activa {
+            display: block;
+        }
+
+        /* Configuración del marco para que se adapte al móvil */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tabs-navegacion">
+        <button class="boton-tab activo" id="btn-prod" onclick="cambiarMotor('prod')">🎬 PROD</button>
+        <button class="boton-tab" id="btn-pub" onclick="cambiarMotor('pub')">📦 PUB</button>
+        <button class="boton-tab" id="btn-guard" onclick="cambiarMotor('guard')">🛡️ GUARD</button>
+    </div>
+
+    <div class="contenedor-pantallas">
+        <div id="pantalla-prod" class="pantalla activa">
+            <iframe src="https://cristobal299-canal-1.hf.space"></iframe>
+        </div>
+        <div id="pantalla-pub" class="pantalla">
+            <iframe src="https://cristobal299-canal-2.hf.space"></iframe>
+        </div>
+        <div id="pantalla-guard" class="pantalla">
+            <iframe src="https://cristobal299-curso-teshuaaa.hf.space"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function cambiarMotor(idMotor) {
+            // 1. Desactivar todas las pantallas
+            const pantallas = document.querySelectorAll('.pantalla');
+            pantallas.forEach(p => p.classList.remove('activa'));
+
+            // 2. Quitar la luz de activo a todos los botones
+            const botones = document.querySelectorAll('.boton-tab');
+            botones.forEach(b => b.classList.remove('activo'));
+
+            // 3. Activar la pantalla seleccionada
+            document.getElementById('pantalla-' + idMotor).classList.add('activa');
+
+            // 4. Iluminar el botón pulsado
+            document.getElementById('btn-' + idMotor).classList.add('activo');
+        }
+    </script>
+
+</body>
+</html>
