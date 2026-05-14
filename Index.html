@@ -3,117 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔱 Panel Imperial Teshuá</title>
+    <title>🔱 Panel Imperial - Tres Motores</title>
     <style>
-        /* Estilo general de la página en el móvil */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --accent-gold: #D4AF37;
+            --accent-cyan: #00ffff;
+            --text-color: #e0e0e0;
+        }
+
         body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #121212; /* Gris oscuro de fondo */
-            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
             overflow: hidden;
         }
 
-        /* Botonera superior fija */
-        .tabs-navegacion {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background-color: #1e1e1e; /* Gris oscuro profesional para la barra */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            z-index: 1000;
+        /* Cabecera */
+        header {
+            background-color: var(--card-bg);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-gold);
         }
 
-        /* Botones pequeños y táctiles */
-        .boton-tab {
-            background-color: #333333;
-            color: #aaaaaa;
-            border: 1px solid #444444;
-            padding: 8px 16px;
-            font-size: 0.9em;
-            font-weight: bold;
-            border-radius: 20px; /* Bordes redondeados */
-            cursor: pointer;
-            transition: all 0.3s ease;
+        header h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+            letter-spacing: 2px;
         }
 
-        /* Botón iluminado cuando está activo */
-        .boton-tab.activo {
-            background-color: #00ffff; /* Color cian brillante para resaltar */
-            color: #000000;
-            border-color: #00ffff;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-        }
-
-        /* Contenedor que ocupa el resto de la pantalla del móvil */
+        /* Contenedor de Pantallas */
         .contenedor-pantallas {
-            margin-top: 60px; /* Espacio para no taparse con los botones */
-            width: 100%;
-            height: calc(100vh - 60px);
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            padding-bottom: 80px; /* Espacio para la botonera inferior */
         }
 
-        /* Ocultar o mostrar los espacios de Hugging Face */
         .pantalla {
             display: none;
-            width: 100%;
-            height: 100%;
         }
 
         .pantalla.activa {
             display: block;
         }
 
-        /* Configuración del marco para que se adapte al móvil */
-        iframe {
+        /* Estilos de Tarjetas y Bloques */
+        .tarjeta {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+        }
+
+        .bloque-tarea {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .bloque-tarea:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .icono-estado {
+            font-size: 1.8rem;
+            width: 45px;
+            text-align: center;
+        }
+
+        .info-tarea {
+            flex: 1;
+        }
+
+        .info-tarea h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.1rem;
+            color: var(--accent-cyan);
+        }
+
+        .info-tarea p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Barras de Progreso para GUARD */
+        .contenedor-progreso {
+            margin-top: 8px;
+            background-color: #333;
+            border-radius: 6px;
+            overflow: hidden;
+            height: 12px;
             width: 100%;
+        }
+
+        .barra-progreso {
+            background: linear-gradient(90deg, var(--accent-gold), #fff);
             height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Botonera Inferior Táctil */
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--card-bg);
+            display: flex;
+            border-top: 1px solid #333;
+            height: 65px;
+            z-index: 100;
+        }
+
+        .btn-nav {
+            flex: 1;
+            background: none;
             border: none;
+            color: #777;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .btn-nav.activo {
+            color: var(--accent-gold);
+            border-top: 3px solid var(--accent-gold);
+        }
+
+        .icono-nav {
+            font-size: 1.2rem;
+        }
+
+        /* Historial de Comentarios */
+        .comentario-item {
+            border-left: 3px solid var(--accent-gold);
+            padding-left: 10px;
+            margin-bottom: 12px;
+        }
+        .comentario-meta {
+            font-size: 0.8rem;
+            color: #777;
         }
     </style>
 </head>
 <body>
 
-    <div class="tabs-navegacion">
-        <button class="boton-tab activo" id="btn-prod" onclick="cambiarMotor('prod')">🎬 PROD</button>
-        <button class="boton-tab" id="btn-pub" onclick="cambiarMotor('pub')">📦 PUB</button>
-        <button class="boton-tab" id="btn-guard" onclick="cambiarMotor('guard')">🛡️ GUARD</button>
-    </div>
+    <header>
+        <h1 id="titulo-panel">🔱 MONITOR IMPERIAL</h1>
+    </header>
 
     <div class="contenedor-pantallas">
+
         <div id="pantalla-prod" class="pantalla activa">
-            <iframe src="https://cristobal299-canal-1.hf.space"></iframe>
+            <div class="tarjeta">
+                <h2 style="color: var(--accent-gold); margin-top: 0; font-size: 1.2rem;">💬 Comentarios del Lunes</h2>
+                <div id="lista-comentarios">Cargando registros...</div>
+            </div>
         </div>
+
         <div id="pantalla-pub" class="pantalla">
-            <iframe src="https://cristobal299-canal-2.hf.space"></iframe>
+            <div class="tarjeta">
+                <div class="bloque-tarea">
+                    <div class="icono-estado">🎬</div>
+                    <div class="info-tarea">
+                        <h3>Creación de Vídeo</h3>
+                        <p id="c2-crea">Esperando estado...</p>
+                    </div>
+                </div>
+                <div class="bloque-tarea">
+                    <div class="icono-estado">🚀</div>
+                    <div class="info-tarea">
+                        <h3>Publicación YouTube</h3>
+                        <p id="c2-pub">Esperando estado...</p>
+                    </div>
+                </div>
+                <div class="bloque-tarea">
+                    <div class="icono-estado">📌</div>
+                    <div class="info-tarea">
+                        <h3>Comentario Automatizado</h3>
+                        <p id="c2-com">Esperando estado...</p>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <div id="pantalla-guard" class="pantalla">
-            <iframe src="https://cristobal299-curso-teshuaaa.hf.space"></iframe>
+            <div class="tarjeta">
+                <h2 style="color: var(--accent-gold); margin-top: 0; font-size: 1.2rem; display: flex; justify-content: space-between;">
+                    <span>🔮 Estado del Oráculo</span>
+                    <span id="guard-timer" style="color:#fff; font-size: 1rem;">00:00:00</span>
+                </h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                        <span style="color: var(--accent-cyan);">Fase 1: Producción Multimedia</span>
+                        <span id="txt-progreso-crea">0%</span>
+                    </div>
+                    <div class="contenedor-progreso">
+                        <div id="barra-crea" class="barra-progreso"></div>
+                    </div>
+                    <p id="estado-detallado-crea" style="font-size: 0.8rem; color: #aaa; margin: 5px 0 0 0;">Iniciando...</p>
+                </div>
+
+                <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                        <span style="color: var(--accent-cyan);">Fase 2: Despliegue YouTube</span>
+                        <span id="txt-progreso-subida">0%</span>
+                    </div>
+                    <div class="contenedor-progreso">
+                        <div id="barra-subida" class="barra-progreso"></div>
+                    </div>
+                    <p id="estado-detallado-subida" style="font-size: 0.8rem; color: #aaa; margin: 5px 0 0 0;">En espera...</p>
+                </div>
+            </div>
         </div>
+
     </div>
 
+    <nav>
+        <button class="btn-nav activo" onclick="cambiarPestaña('prod')">
+            <span class="icono-nav">🛡️</span>
+            <span>PROD</span>
+        </button>
+        <button class="btn-nav" onclick="cambiarPestaña('pub')">
+            <span class="icono-nav">📦</span>
+            <span>PUB</span>
+        </button>
+        <button class="btn-nav" onclick="cambiarPestaña('guard')">
+            <span class="icono-nav">🔮</span>
+            <span>GUARD</span>
+        </button>
+    </nav>
+
     <script>
-        function cambiarMotor(idMotor) {
-            // 1. Desactivar todas las pantallas
-            const pantallas = document.querySelectorAll('.pantalla');
-            pantallas.forEach(p => p.classList.remove('activa'));
+        // --- RUTAS DE CONEXIÓN A HUGGING FACE ---
+        const URL_MOTOR_1 = "https://cristobal299-guardian-sincronizado.hf.space"; // Cambia si el nombre de tu espacio es diferente
+        const URL_MOTOR_2 = "https://cristobal299-canal-2.hf.space";
+        const URL_MOTOR_3 = "https://cristobal299-oraculo-curso.hf.space"; // Ajusta con la URL real de tu tercer espacio
 
-            // 2. Quitar la luz de activo a todos los botones
-            const botones = document.querySelectorAll('.boton-tab');
-            botones.forEach(b => b.classList.remove('activo'));
+        // --- SISTEMA DE PESTAÑAS NATIVO ---
+        function cambiarPestaña(destino) {
+            // Desactivar todas las pantallas y botones
+            document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+            document.querySelectorAll('.btn-nav').forEach(b => b.classList.remove('activo'));
 
-            // 3. Activar la pantalla seleccionada
-            document.getElementById('pantalla-' + idMotor).classList.add('activa');
-
-            // 4. Iluminar el botón pulsado
-            document.getElementById('btn-' + idMotor).classList.add('activo');
+            // Activar la seleccionada
+            if(destino === 'prod') {
+                document.getElementById('pantalla-prod').classList.add('activa');
+                event.currentTarget.classList.add('activo');
+                document.getElementById('titulo-panel').innerText = "🔱 GUARDIÁN CURSO";
+                cargarMotor1();
+            } else if(destino === 'pub') {
+                document.getElementById('pantalla-pub').classList.add('activa');
+                event.currentTarget.classList.add('activo');
+                document.getElementById('titulo-panel').innerText = "🎬 MOTOR CANAL 2";
+                cargarMotor2();
+            } else if(destino === 'guard') {
+                document.getElementById('pantalla-guard').classList.add('activa');
+                event.currentTarget.classList.add('activo');
+                document.getElementById('titulo-panel').innerText = "🔮 ORÁCULO TESHUÁ";
+                cargarMotor3();
+            }
         }
-    </script>
 
-</body>
-</html>
+        // --- LECTURA MOTOR 1: PROD (Comentarios Guardián) ---
+        async function cargarMotor1() {
+            try {
+                const res = await fetch(`${URL_MOTOR_1}/api/comentarios`);
+                const data = await res.json();
+                let html = "";
+                
+                if(data.comentarios && data.comentarios.length > 0) {
+                    data.comentarios.reverse().forEach(c => {
+                        html += `
+                            <div class="comentario-item">
+                                <div class="comentario-meta">📅 ${c.fecha_hora} | 🎬 ID: ${c.video_id}</div>
+                                <div style="margin-top:4px; font-size:0.95rem;">${c.texto}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html = "<p style='color:#777;'>No hay comentarios registrados esta semana.</p>";
+                }
+                document.getElementById('lista-comentarios').innerHTML = html;
+            } catch(e) {
+                document.getElementById('lista-comentarios').innerHTML = "<p style='color:red;'>⚠️ Error de conexión con Motor 1</p>";
+            }
+        }
+
+        // --- LECTURA MOTOR 2: PUB (Canal 2 - Triple Acción) ---
+        async function cargarMotor2() {
+            try {
+                const res = await fetch(`${URL_MOTOR_2}/api/estado_pub`);
+                const data = await res.json();
+                
+                document.getElementById('c2-crea').innerText = `${data.creacion.status} (${data.creacion.hora})\n📄 ${data.creacion.archivo}`;
+                document.getElementById('c2-pub').innerText = `${data.publicacion.status} (${data.publicacion.hora})`;
+                document.getElementById('c2-com').innerText = `${data.comentario.status} (${data.comentario.hora})\n💬 ${data.comentario.texto}`;
+            } catch(e) {
+                document.getElementById('c2-crea').innerText = "⚠️ Error de enlace";
+                document.getElementById('c2-pub').innerText = "⚠️ Error de enlace";
+                document.getElementById('c2-com').innerText = "⚠️ Error de enlace";
+            }
+        }
+
+        // --- LECTURA MOTOR 3: GUARD (Oráculo - Progreso Doble) ---
+        async function cargarMotor3() {
+            try {
+                // Obtenemos los datos de la barra de progreso
+                const resProgreso = await fetch(`${URL_MOTOR_3}/api/progreso_curso`);
+                const dataProgreso = await resProgreso.json();
+                
+                // Actualizar Barra de Creación
+                let pC
+        
