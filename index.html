@@ -259,18 +259,16 @@
     </nav>
 
     <script>
-        // --- RUTAS DE CONEXIÓN A HUGGING FACE ---
-        const URL_MOTOR_1 = "https://cristobal299-guardian-sincronizado.hf.space"; // Cambia si el nombre de tu espacio es diferente
+        // --- DIRECCIONES DE TUS ESPACIOS EN HUGGING FACE ---
+        const URL_MOTOR_1 = "https://cristobal299-canal-1.hf.space"; 
         const URL_MOTOR_2 = "https://cristobal299-canal-2.hf.space";
-        const URL_MOTOR_3 = "https://cristobal299-oraculo-curso.hf.space"; // Ajusta con la URL real de tu tercer espacio
+        const URL_MOTOR_3 = "https://cristobal299-curso-teshuaaa.hf.space"; 
 
-        // --- SISTEMA DE PESTAÑAS NATIVO ---
+        // --- NAVEGACIÓN ENTRE PESTAÑAS ---
         function cambiarPestaña(destino) {
-            // Desactivar todas las pantallas y botones
             document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
             document.querySelectorAll('.btn-nav').forEach(b => b.classList.remove('activo'));
 
-            // Activar la seleccionada
             if(destino === 'prod') {
                 document.getElementById('pantalla-prod').classList.add('activa');
                 event.currentTarget.classList.add('activo');
@@ -289,7 +287,7 @@
             }
         }
 
-        // --- LECTURA MOTOR 1: PROD (Comentarios Guardián) ---
+        // --- CONSULTA API: MOTOR 1 (Comentarios) ---
         async function cargarMotor1() {
             try {
                 const res = await fetch(`${URL_MOTOR_1}/api/comentarios`);
@@ -314,7 +312,7 @@
             }
         }
 
-        // --- LECTURA MOTOR 2: PUB (Canal 2 - Triple Acción) ---
+        // --- CONSULTA API: MOTOR 2 (Canal 2) ---
         async function cargarMotor2() {
             try {
                 const res = await fetch(`${URL_MOTOR_2}/api/estado_pub`);
@@ -330,13 +328,49 @@
             }
         }
 
-        // --- LECTURA MOTOR 3: GUARD (Oráculo - Progreso Doble) ---
+        // --- CONSULTA API: MOTOR 3 (Curso) ---
         async function cargarMotor3() {
             try {
-                // Obtenemos los datos de la barra de progreso
                 const resProgreso = await fetch(`${URL_MOTOR_3}/api/progreso_curso`);
                 const dataProgreso = await resProgreso.json();
                 
-                // Actualizar Barra de Creación
-                let pC
-        
+                // Barra de Creación
+                let pCrea = dataProgreso.creacion.porcentaje;
+                document.getElementById('barra-crea').style.width = `${pCrea}%`;
+                document.getElementById('txt-progreso-crea').innerText = `${pCrea}%`;
+                document.getElementById('estado-detallado-crea').innerText = dataProgreso.creacion.estado;
+
+                // Barra de Subida
+                let pSubida = dataProgreso.subida.porcentaje;
+                document.getElementById('barra-subida').style.width = `${pSubida}%`;
+                document.getElementById('txt-progreso-subida').innerText = `${pSubida}%`;
+                document.getElementById('estado-detallado-subida').innerText = dataProgreso.subida.estado;
+
+                // Temporizador de Reposo
+                const resData = await fetch(`${URL_MOTOR_3}/get_data`);
+                const dataData = await resData.json();
+                if(dataData.restante > 0) {
+                    let h = Math.floor(dataData.restante / 3600), 
+                        m = Math.floor((dataData.restante % 3600) / 60), 
+                        sec = dataData.restante % 60;
+                    document.getElementById('guard-timer').innerText = [h,m,sec].map(v=>v.toString().padStart(2,'0')).join(':');
+                } else {
+                    document.getElementById('guard-timer').innerText = "ACTIVO 🔥";
+                }
+            } catch(e) {
+                document.getElementById('estado-detallado-crea').innerText = "⚠️ Error de enlace con Oráculo";
+                document.getElementById('estado-detallado-subida').innerText = "⚠️ Error de enlace con Oráculo";
+            }
+        }
+
+        // --- SINCRO AUTOMÁTICA CADA 3 SEGUNDOS ---
+        setInterval(() => {
+            if(document.getElementById('pantalla-prod').classList.contains('activa')) cargarMotor1();
+            if(document.getElementById('pantalla-pub').classList.contains('activa')) cargarMotor2();
+            if(document.getElementById('pantalla-guard').classList.contains('activa')) cargarMotor3();
+        }, 3000);
+
+        window.onload = () => { cargarMotor1(); };
+    </script>
+</body>
+</html>
